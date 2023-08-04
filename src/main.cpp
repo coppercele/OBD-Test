@@ -1,15 +1,13 @@
 #include <Arduino.h>
 #include <M5Stack.h>
 #include <Serial_CAN_Module.h>
-// #include <CAN.h> // the OBD2 library depends on the CAN library
-// #include <OBD2.h>
 
 #define STANDARD_CAN_11BIT 1 // That depands on your car. some 1 some 0.
 
 Serial_CAN can;
 
-#define can_tx 21 // tx of serial can module, the yellow cable
-#define can_rx 22 // rx of serial can module, the white cable
+#define can_tx 21
+#define can_rx 22
 
 #define PID_ENGIN_PRM 0x0C
 #define PID_VEHICLE_SPEED 0x0D
@@ -31,12 +29,15 @@ void sendPid(unsigned char __pid) {
 #endif
 }
 bool getRPM(int *r) {
+  M5.Lcd.println("Start getRPM: ");
   sendPid(PID_ENGIN_PRM);
+  M5.Lcd.println("sendPid: ");
   unsigned long __timeout = millis();
 
   while (millis() - __timeout < 1000) {
     unsigned long id = 0;
     unsigned char buf[8];
+    M5.Lcd.println("Received: ");
 
     if (can.recv(&id, buf)) { // check if get data
 
@@ -61,11 +62,14 @@ void setup() {
   Serial1.begin(9600, SERIAL_8N1, can_rx, can_tx); // RX,TX
 
   can.begin(Serial1, 9600);
+  // Serial1.begin(500000, SERIAL_8N1, can_rx, can_tx); // RX,TX
+
+  // can.begin(Serial1, 500000);
   M5.Lcd.println("end");
 }
 
 void loop() {
-
+  M5.Lcd.println("Start: ");
   int __rpm = 0;
   int ret = getRPM(&__rpm);
   if (ret) {
