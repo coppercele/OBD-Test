@@ -57,11 +57,11 @@ void setup() {
   // 文字描画
   M5.Lcd.setTextSize(2);
   M5.Lcd.setCursor(0, 0);
-
-  M5.Lcd.println("end");
+  M5.Lcd.println("CAN setup");
   Serial1.begin(9600, SERIAL_8N1, can_rx, can_tx); // RX,TX
 
   can.begin(Serial1, 9600);
+  M5.Lcd.println("end");
 }
 
 void loop() {
@@ -69,9 +69,9 @@ void loop() {
   int __rpm = 0;
   int ret = getRPM(&__rpm);
   if (ret) {
-    Serial.print("Engin Speed: ");
-    Serial.print(__rpm);
-    Serial.println(" rpm");
+    M5.Lcd.print("Engin Speed: ");
+    M5.Lcd.print(__rpm);
+    M5.Lcd.println(" rpm");
   }
   delay(500);
   delay(1);
