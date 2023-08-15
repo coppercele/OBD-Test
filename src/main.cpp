@@ -54,10 +54,22 @@ void setup() {
   // Serial1.begin(115200, SERIAL_8N1, can_rx, can_tx); // RX,TX
 
   // can.begin(Serial1, 115200);
+
+  M5.Lcd.setCursor(0, 0);
+  M5.Lcd.println("CAN setup");
+  M5.Lcd.println("end");
+  Serial1.begin(baud, SERIAL_8N1, can_rx, can_tx); // RX,TX
+
+  can.begin(Serial1, baud);
+
+  M5.Lcd.println("Start: ");
 }
 
 bool isStart = false;
 unsigned long baud = 9600;
+
+unsigned long id = 0;
+unsigned char dta[8];
 
 void loop() {
   M5.update();
@@ -80,22 +92,25 @@ void loop() {
   }
 
   if (isStart) {
-    M5.Lcd.setCursor(0, 0);
-    M5.Lcd.println("CAN setup");
-    M5.Lcd.println("end");
-    Serial1.begin(baud, SERIAL_8N1, can_rx, can_tx); // RX,TX
 
-    can.begin(Serial1, baud);
-
-    M5.Lcd.println("Start: ");
-    int __rpm = 0;
-    int ret = getRPM(&__rpm);
-    if (ret) {
-      M5.Lcd.print("Engin Speed: ");
-      M5.Lcd.print(__rpm);
-      M5.Lcd.println(" rpm");
+    if (can.recv(&id, dta)) {
+      Serial.print("GET DATA FROM ID: ");
+      Serial.println(id);
+      for (int i = 0; i < 8; i++) {
+        Serial.print("0x");
+        Serial.print(dta[i], HEX);
+        Serial.print('\t');
+      }
+      Serial.println();
     }
-    delay(500);
+    // int __rpm = 0;
+    // int ret = getRPM(&__rpm);
+    // if (ret) {
+    //   M5.Lcd.print("Engin Speed: ");
+    //   M5.Lcd.print(__rpm);
+    //   M5.Lcd.println(" rpm");
+    // }
+    // delay(500);
   }
   delay(1);
 }
