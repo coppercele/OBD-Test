@@ -58,7 +58,7 @@ void setup() {
   M5.Lcd.setCursor(0, 0);
   M5.Lcd.println("CAN setup");
   M5.Lcd.println("end");
-  Serial1.begin(baud, SERIAL_8N1, can_rx, can_tx); // RX,TX
+  Serial1.begin(9600s, SERIAL_8N1, can_rx, can_tx); // RX,TX
 
   can.begin(Serial1, baud);
 
