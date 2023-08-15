@@ -17,7 +17,7 @@
 // }
 
 void Serial_CAN::begin(HardwareSerial &serial, unsigned long baud) {
-  serial.begin(baud);
+  // serial.begin(baud);
   hardwareSerial = &serial;
   canSerial = &serial;
 }
