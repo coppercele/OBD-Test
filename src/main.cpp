@@ -58,12 +58,11 @@ void setup() {
   M5.Lcd.setCursor(0, 0);
   M5.Lcd.println("CAN setup");
   M5.Lcd.println("end");
-  Serial1.begin(9600s, SERIAL_8N1, can_rx, can_tx); // RX,TX
+  Serial1.begin(9600, SERIAL_8N1, can_rx, can_tx); // RX,TX
 
-  can.begin(Serial1, baud);
+  can.begin(Serial1, 9600);
 
-  M5.Lcd.println("Start: ");
-}
+  M5.Lcd.println("Start: ");}
 
 bool isStart = false;
 unsigned long baud = 9600;
